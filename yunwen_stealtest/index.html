@@ -44,7 +44,8 @@
             var event_list = []
             var mJson = $.ajax({
                 url: "encode.json",
-                async: false
+                async: false,
+                dataType: "json"
             });
             var code_dict = JSON.parse(mJson.responseText);
             console.log(code_dict);
